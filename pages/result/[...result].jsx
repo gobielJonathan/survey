@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import classNames from "classnames";
 
 export default function Result() {
   const { query, isFallback } = useRouter();
@@ -28,7 +29,7 @@ export default function Result() {
 
   const onSeeResult = useCallback(() => {
     setSeeResult(true);
-  }, [seeResult]);
+  }, []);
 
   if (isFallback) return <div>loading...</div>;
   return (
@@ -51,7 +52,11 @@ export default function Result() {
             </button>
           </>
         ) : (
-          <div className="result mt-4 grid grid-row-3 md:grid-cols-3 md:space-x-5">
+          <div
+            className={
+              "result mt-4 grid grid-row-3 md:grid-cols-3 x-sm:space-y-8 md:space-x-5 md:space-y-0"
+            }
+          >
             <div className="flex flex-col">
               <h3 className="rounded py-2 bg-blue-400 text-center font-semibold text-white">
                 SECTION A
