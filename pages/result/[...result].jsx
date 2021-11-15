@@ -54,6 +54,7 @@ export default function Result() {
                 SECTION A
               </h3>
               <p className="mt-3 font-bold text-blue-400">{section_a_label}</p>
+              <p className="mt-3 font-light">Score: {section_a}</p>
               <div className="mt-6">
                 <p>Total 17 or less:</p>
                 <p className="font-bold">Low-level burnout</p>
@@ -71,6 +72,8 @@ export default function Result() {
                 SECTION B
               </h3>
               <p className="mt-3 font-bold text-green-400">{section_b_label}</p>
+              <p className="mt-3 font-light">Score: {section_b}</p>
+
               <div className="mt-6">
                 <p>Total 5 or less:</p>
                 <p className="font-bold">Low-level burnout</p>
@@ -90,6 +93,7 @@ export default function Result() {
               <p className="mt-3 font-bold text-yellow-400">
                 {section_c_label}
               </p>
+              <p className="mt-3 font-light">Score: {section_c}</p>
               <div className="mt-6">
                 <p>Total 33 or less:</p>
                 <p className="font-bold">High-level burnout</p>
