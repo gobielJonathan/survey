@@ -10,7 +10,12 @@ const CHOICES = [
   "Everyday",
 ];
 
-export default function Question({ step = 0, question_idx = 0, title = "" }) {
+export default function Question({
+  step = 0,
+  question_idx = 0,
+  onChange = () => {},
+  title = "",
+}) {
   const field = useField(`section_${step}_${question_idx}`);
 
   return (
@@ -29,8 +34,18 @@ export default function Question({ step = 0, question_idx = 0, title = "" }) {
               name={`section_${step}_${question_idx}`}
               value={String(idx)}
               component={"input"}
-              id={`section_${step}_${question_idx}_${idx}`}
-            />
+            >
+              {({ input }) => (
+                <input
+                  {...input}
+                  id={`section_${step}_${question_idx}_${idx}`}
+                  onChange={(e) => {
+                    input.onChange(e);
+                    onChange(step, question_idx, e.target.value);
+                  }}
+                />
+              )}
+            </Field>
             <label
               htmlFor={`section_${step}_${question_idx}_${idx}`}
               className="ml-2"

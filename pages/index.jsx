@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Form } from "react-final-form";
 import Question from "../component/Question";
 import Head from "next/head";
+import classNames from "classnames";
 
 const questions = [
   [
@@ -38,6 +39,7 @@ const questions = [
 export default function Home() {
   const [step, setStep] = useState(0);
   const router = useRouter();
+  const [scores, setScores] = useState([[], [], []]);
 
   const next = useCallback(() => {
     if (step + 1 < questions.length) setStep(step + 1);
@@ -47,29 +49,27 @@ export default function Home() {
     if (step - 1 >= 0) setStep(step - 1);
   }, [step]);
 
-  const submit = (values) => {
-    const transform = Object.entries(values).reduce((curr, [key, value]) => {
-      const [_, step, __] = key.split("_");
-      if (!curr[step]) curr[step] = [];
-      curr[step]?.push(+value);
-      return curr;
-    }, {});
-
-    const total_a = Object.values(transform[0]).reduce(
-      (curr, val) => curr + val,
-      0
-    );
-    const total_b = Object.values(transform[1]).reduce(
-      (curr, val) => curr + val,
-      0
-    );
-    const total_c = Object.values(transform[2]).reduce(
-      (curr, val) => curr + val,
-      0
-    );
-    console.log({ values });
+  const submit = useCallback(() => {
+    const total_a = scores[0].reduce((curr, val) => curr + +val, 0);
+    const total_b = scores[1].reduce((curr, val) => curr + +val, 0);
+    const total_c = scores[2].reduce((curr, val) => curr + +val, 0);
     router.push({ pathname: `/result/${total_a}/${total_b}/${total_c}` });
+  }, [scores]);
+
+  const onScoreChange = (step, question_idx, value) => {
+    const newScore = { ...scores };
+    newScore[step][question_idx] = value;
+    setScores(newScore);
   };
+
+  const scorePerSection = useMemo(
+    () => scores[step]?.reduce((curr, val) => curr + +val, 0),
+    [scores, step]
+  );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [step]);
 
   return (
     <>
@@ -81,13 +81,15 @@ export default function Home() {
           <h1 className="text-center font-bold capitalize">
             How burnout are you?
           </h1>
-          <p className="mt-3">
-            Hi guys, the objective of this test is simply to make you aware that
-            anyone may be at risk of burnout. For each question, indicate the
-            score that corresponds to your response relevant to how you have
-            felt during the last 2 weeks. There's no "right" or "wrong" answer,
-            so please fill in honestly :)
-          </p>
+          {step === 0 ? (
+            <p className="mt-3">
+              Hi guys, the objective of this test is simply to make you aware
+              that anyone may be at risk of burnout. For each question, indicate
+              the score that corresponds to your response relevant to how you
+              have felt during the last 2 weeks. There's no "right" or "wrong"
+              answer, so please fill in honestly :)
+            </p>
+          ) : null}
         </section>
         <div className="bg-gray-100 mb-3 h-1"></div>
         <Form
@@ -102,14 +104,22 @@ export default function Home() {
           }}
           render={({ handleSubmit, hasValidationErrors }) => (
             <form onSubmit={handleSubmit}>
-              <h3>
-                <span className="font-bold">Section {step + 1}</span> / 3
+              <h3
+                className={classNames({
+                  "text-blue-400": step === 0,
+                  "text-green-400": step === 1,
+                  "text-yellow-400": step === 2,
+                })}
+              >
+                <span className={"font-bold"}>Section {step + 1}</span> / 3
+                <span className="ml-3">Score: {scorePerSection}</span>
               </h3>
               {questions[step]?.map((title, idx) => (
                 <Question
                   question_idx={idx}
                   step={step}
                   key={idx}
+                  onChange={onScoreChange}
                   title={title}
                 />
               ))}
