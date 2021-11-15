@@ -1,4 +1,4 @@
-import { Field } from "react-final-form";
+import { Field, useField } from "react-final-form";
 
 const CHOICES = [
   "Never",
@@ -11,9 +11,13 @@ const CHOICES = [
 ];
 
 export default function Question({ step = 0, question_idx = 0, title = "" }) {
+  const field = useField(`section_${step}_${question_idx}`);
+
   return (
     <div className="shadow-md rounded-md p-3 mt-4">
-      <h5>{title}</h5>
+      <h5>
+        {question_idx + 1}. {title}
+      </h5>
       {CHOICES.map((label, idx) => (
         <div
           key={idx}
@@ -26,7 +30,6 @@ export default function Question({ step = 0, question_idx = 0, title = "" }) {
               value={String(idx)}
               component={"input"}
               id={`section_${step}_${question_idx}_${idx}`}
-              required
             />
             <label
               htmlFor={`section_${step}_${question_idx}_${idx}`}
@@ -37,6 +40,9 @@ export default function Question({ step = 0, question_idx = 0, title = "" }) {
           </div>
         </div>
       ))}
+      {field.meta.error && field.meta.touched && (
+        <p className="text-red-500">* {field.meta.error}</p>
+      )}
     </div>
   );
 }

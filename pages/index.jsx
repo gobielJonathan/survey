@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { Form } from "react-final-form";
 import Question from "../component/Question";
+import Head from "next/head";
 
 const questions = [
   [
@@ -66,74 +67,88 @@ export default function Home() {
       (curr, val) => curr + val,
       0
     );
+    console.log({ values });
     router.push({ pathname: `/result/${total_a}/${total_b}/${total_c}` });
   };
 
   return (
-    <div className="container-sm mx-auto p-3">
-      <section className="header mb-5">
-        <h1 className="text-center font-bold capitalize">
-          How burnout are you?
-        </h1>
-        <p className="mt-3">
-          Hi guys, the objective of this test is simply to make you aware that
-          anyone may be at risk of burnout. For each question, indicate the
-          score that corresponds to your response relevant to how you have felt
-          during the last 2 weeks. There's no "right" or "wrong" answer, so
-          please fill in honestly :)
-        </p>
-      </section>
-      <div className="bg-gray-100 mb-3 h-1"></div>
-      <Form
-        onSubmit={submit}
-        keepDirtyOnReinitialize
-        render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <h3>
-              <span className="font-bold">Section {step + 1}</span> / 3
-            </h3>
-            {questions[step]?.map((title, idx) => (
-              <Question
-                question_idx={idx}
-                step={step}
-                key={idx}
-                title={title}
-              />
-            ))}
+    <>
+      <Head>
+        <title>Survey | How burnout are you?</title>
+      </Head>
+      <div className="md:container mx-auto p-3">
+        <section className="header mb-5">
+          <h1 className="text-center font-bold capitalize">
+            How burnout are you?
+          </h1>
+          <p className="mt-3">
+            Hi guys, the objective of this test is simply to make you aware that
+            anyone may be at risk of burnout. For each question, indicate the
+            score that corresponds to your response relevant to how you have
+            felt during the last 2 weeks. There's no "right" or "wrong" answer,
+            so please fill in honestly :)
+          </p>
+        </section>
+        <div className="bg-gray-100 mb-3 h-1"></div>
+        <Form
+          onSubmit={submit}
+          keepDirtyOnReinitialize
+          validate={(values) => {
+            return questions[step].reduce((curr, _, question_idx) => {
+              if (!values[`section_${step}_${question_idx}`])
+                curr[`section_${step}_${question_idx}`] = `Required`;
+              return curr;
+            }, {});
+          }}
+          render={({ handleSubmit, hasValidationErrors }) => (
+            <form onSubmit={handleSubmit}>
+              <h3>
+                <span className="font-bold">Section {step + 1}</span> / 3
+              </h3>
+              {questions[step]?.map((title, idx) => (
+                <Question
+                  question_idx={idx}
+                  step={step}
+                  key={idx}
+                  title={title}
+                />
+              ))}
 
-            <div className="mt-3 flex justify-end space-x-4">
-              {step > 0 && (
-                <button
-                  type="button"
-                  className="border shadow-sm bg-white border-green-400 text-white p-3 rounded w-32 font-semibold text-green-400"
-                  onClick={prev}
-                >
-                  Prev
-                </button>
-              )}
+              <div className="mt-3 flex justify-end space-x-4">
+                {step > 0 && (
+                  <button
+                    type="button"
+                    className="border shadow-sm bg-white border-green-400 text-white p-3 rounded w-32 font-semibold text-green-400"
+                    onClick={prev}
+                  >
+                    Prev
+                  </button>
+                )}
 
-              {step < questions.length - 1 && (
-                <button
-                  type="button"
-                  className="shadow-sm bg-green-400 text-white p-3 rounded w-32 font-semibold text-center"
-                  onClick={next}
-                >
-                  Next
-                </button>
-              )}
+                {step < questions.length - 1 && (
+                  <button
+                    type="button"
+                    className="shadow-sm bg-green-400 text-white p-3 rounded w-32 font-semibold text-center disabled:bg-green-100"
+                    onClick={next}
+                    disabled={hasValidationErrors}
+                  >
+                    Next
+                  </button>
+                )}
 
-              {step === questions.length - 1 && (
-                <button
-                  type={"submit"}
-                  className="shadow-sm bg-green-400 text-white p-3 rounded w-32 font-semibold text-center"
-                >
-                  Submit
-                </button>
-              )}
-            </div>
-          </form>
-        )}
-      />
-    </div>
+                {step === questions.length - 1 && (
+                  <button
+                    type={"submit"}
+                    className="shadow-sm bg-green-400 text-white p-3 rounded w-32 font-semibold text-center"
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
+            </form>
+          )}
+        />
+      </div>
+    </>
   );
 }
