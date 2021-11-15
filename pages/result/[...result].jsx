@@ -36,12 +36,15 @@ export default function Result() {
       <Head>
         <title>Survey Result | How burnout are you?</title>
       </Head>
-      <div className="container mx-auto p-3">
+      <div
+        className="container flex flex-col justify-center items-center mx-auto p-3"
+        style={{ height: "100vh" }}
+      >
         {!seeResult ? (
           <>
             <h1>Ready to see your score?</h1>
             <button
-              className="rounded bg-blue-400 font-bold py-3 px-10 text-white"
+              className="rounded bg-blue-400 font-bold py-3 px-10 text-white mt-3"
               onClick={onSeeResult}
             >
               Yeah! Let me see.
