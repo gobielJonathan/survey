@@ -56,6 +56,9 @@ export default function Result() {
               <h3 className="rounded py-2 bg-blue-400 text-center font-semibold text-white">
                 SECTION A
               </h3>
+              <h5 className="font-semibold text-blue-400">
+                Emotional Exhaustion
+              </h5>
               <p className="mt-3 font-light">Score: {section_a}</p>
               <p className="mt-3 font-bold text-blue-400">{section_a_label}</p>
             </div>
@@ -64,6 +67,9 @@ export default function Result() {
               <h3 className="rounded py-2 bg-green-400 text-center font-semibold text-white">
                 SECTION B
               </h3>
+              <h5 className="font-semibold text-green-400">
+                Depersonalisation
+              </h5>
               <p className="mt-3 font-light">Score: {section_b}</p>
               <p className="mt-3 font-bold text-green-400">{section_b_label}</p>
             </div>
@@ -72,6 +78,9 @@ export default function Result() {
               <h3 className="rounded py-2 bg-yellow-400 text-center font-semibold text-white">
                 SECTION C
               </h3>
+              <h5 className="font-semibold text-yellow-400">
+                Lack of Personal Achievement
+              </h5>
               <p className="mt-3 font-light">Score: {section_c}</p>
               <p className="mt-3 font-bold text-yellow-400">
                 {section_c_label}
