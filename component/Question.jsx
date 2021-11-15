@@ -19,7 +19,7 @@ export default function Question({
   const field = useField(`section_${step}_${question_idx}`);
 
   return (
-    <div className="shadow-md rounded-md p-3 mt-4">
+    <div className="rounded-md p-3 mt-4">
       <h5>
         {question_idx + 1}. {title}
       </h5>

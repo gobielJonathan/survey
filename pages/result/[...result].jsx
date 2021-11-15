@@ -51,7 +51,7 @@ export default function Result() {
             </button>
           </>
         ) : (
-          <div className="result mt-4 grid grid-cols-3 space-x-5">
+          <div className="result mt-4 grid grid-row-3 md:grid-cols-3 md:space-x-5">
             <div className="flex flex-col">
               <h3 className="rounded py-2 bg-blue-400 text-center font-semibold text-white">
                 SECTION A
